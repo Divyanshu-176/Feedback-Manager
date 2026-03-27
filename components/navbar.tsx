@@ -35,7 +35,7 @@ export default function Navbar(){
                     </Link>
                     <div className="flex item-center gap-4">
                         <ThemeToggle/>
-                        {!isSignedIn ? <SignInButton mode="redirect"><Button>Sign in</Button></SignInButton> : <SignOutButton><Button>Log out</Button></SignOutButton>}
+                        {!isSignedIn ? <SignInButton mode="modal"><Button>Sign in</Button></SignInButton> : <SignOutButton><Button>Log out</Button></SignOutButton>}
                     </div>
                 </div>
             </div>
