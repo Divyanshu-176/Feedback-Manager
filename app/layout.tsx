@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import {ClerkProvider} from "@clerk/nextjs"
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -22,12 +23,14 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={`${inter.className} min-h-screen flex flex-col`}>
-          <Navbar/>
-          <main className="flex-1 container mx-auto px-4 py-8">
-            {children}
-          </main>
-          <Footer/>
-          <Toaster/>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange >
+            <Navbar/>
+            <main className="flex-1 container mx-auto px-4 py-8">
+              {children}
+            </main>
+            <Footer/>
+            <Toaster/>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

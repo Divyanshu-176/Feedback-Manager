@@ -2,9 +2,13 @@
 
 import { Map, MessageSquare, Sparkle } from "lucide-react"
 import Link from "next/link"
+import ThemeToggle from "./theme-toggle"
+import { SignInButton, SignOutButton, useAuth} from "@clerk/nextjs"
+import { Button } from "./ui/button"
 
 
 export default function Navbar(){
+    const {isSignedIn} = useAuth()  
     return<>
         <nav className="border-b bg-background">
             <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -17,6 +21,10 @@ export default function Navbar(){
                             <span className="text-xl font-bold">Feed Fizz</span>
                         </div>
                     </Link>
+
+
+                </div>
+                <div className="flex gap-5">
                     <Link href="/roadmap" className="text-sm hover:text-primary flex items-center gap-1">
                         <Map className="h-4 w-4"/>
                         Roadmap
@@ -25,8 +33,13 @@ export default function Navbar(){
                         <MessageSquare className="h-4 w-4"/>
                         Feedback
                     </Link>
+                    <div className="flex item-center gap-4">
+                        <ThemeToggle/>
+                        {!isSignedIn ? <SignInButton mode="redirect"><Button>Sign in</Button></SignInButton> : <SignOutButton><Button>Log out</Button></SignOutButton>}
+                    </div>
                 </div>
             </div>
         </nav>
     </>
+
 }
