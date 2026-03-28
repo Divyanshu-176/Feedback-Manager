@@ -14,6 +14,7 @@ export async function syncCurrentUser(){
             throw new Error("User email not found")
         }
 
+
         let dbUser = await prisma.user.findUnique({
             where:{clerkUserId:clerkUser.id}
         })
