@@ -28,7 +28,7 @@ export const STATUS_GROUPS = {
     bgColor:
       "bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30",
     textColor: "text-blue-700 dark:text-blue-300",
-    countColor: "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300",
+    countColor: "bg-blue-100/100 dark:bg-blue-900 text-blue-700 dark:text-blue-300",
   },
   in_progress: {
     title: "In Progress",

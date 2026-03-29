@@ -112,7 +112,6 @@ export default function FeedbackList({initialPosts, userId}:{initialPosts:any[],
                                             className={`text-xs ${design.border} ${design.text} flex items-center gap-1`}
                                             >
                                             <Icon className="h-3 w-3" />
-                                            {post.category}
                                             </Badge>
                                         );
                                     })()}
