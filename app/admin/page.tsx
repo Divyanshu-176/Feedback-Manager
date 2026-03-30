@@ -32,7 +32,7 @@ export default async function AdminPage(){
     })
 
     return <>
-        <div  className="container mx-auto">
+        <div  className="container mx-auto space-y-5">
             <Header title="Admin Dashboard" subtitle="Manage feedbacks and update their status" />
             <AdminFeedBackTable posts={posts} />
         </div>
