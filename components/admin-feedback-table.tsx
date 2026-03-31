@@ -7,8 +7,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { getCategoryDesign } from "@/app/api/data/category-data"
 import { Badge } from "./ui/badge"
 import { Edit, Save, ThumbsUp, User, X } from "lucide-react"
-import { STATUS_GROUPS } from "@/app/api/data/status-data"
+import { STATUS_GROUPS, STATUS_ORDER } from "@/app/api/data/status-data"
 import { Button } from "./ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
+import { toast } from "sonner"
 
 
 
@@ -47,8 +49,35 @@ export default function AdminFeedBackTable({posts}:{posts:any[]}){
         setEditingPostId(null)
     }
 
-    const saveStatus = (postId:number)=>{
+    const saveStatus = async (postId:number)=>{
+        const loadingToast = toast.loading("Saving status...")
+        try {
+            const response = await fetch(`api/feedback/${postId}/status`, {
+                method:"PATCH",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({status:postStatus[postId]})
+            })
 
+            if(!response.ok){
+                throw new Error("Failed to update status")
+            }
+
+            toast.dismiss(loadingToast)
+            toast.success("Feedback status saved")
+        } catch (error) {
+            console.error("Failed to update status: ",error)
+            toast.dismiss(loadingToast)
+            toast.error("Failed to update feedback status")
+        }
+    }
+
+    const handleStatusChange=(postId:number, newStatus:string)=>{
+        setPostStatus((prev)=>({
+            ...prev,
+            [postId]:newStatus
+        }))
     }
 
 
@@ -101,7 +130,39 @@ export default function AdminFeedBackTable({posts}:{posts:any[]}){
                                     </TableCell>
 
                                     <TableCell className="align-middle">
-                                        {isEditing ? <></> : <Badge variant="outline" className={`flex items-center gap-2 ${STATUS_GROUPS[currentStatus as keyof typeof STATUS_GROUPS]?.countColor}`}>{getStatusIcon(currentStatus)}{STATUS_GROUPS[currentStatus as keyof typeof STATUS_GROUPS]?.title}</Badge>}
+                                        {isEditing ? <>
+                                            <Select value={currentStatus} onValueChange={(value)=>handleStatusChange(post.id, value)}>
+                                                <SelectTrigger className="w-[140px]" >
+                                                    <SelectValue>
+                                                        <div className="flex items-center">
+                                                            {getStatusIcon(currentStatus)}
+                                                            {
+                                                                STATUS_GROUPS[currentStatus as keyof typeof STATUS_GROUPS]?.title
+                                                            }
+                                                        </div>
+                                                    </SelectValue>
+
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {STATUS_ORDER.map((status)=>{
+                                                        const statusGroup = STATUS_GROUPS[status as keyof typeof STATUS_GROUPS]
+                                                        const Icon = statusGroup.icon
+
+                                                        return (
+                                                            <SelectItem key={status} value={status}>
+                                                                <div className="flex items-center gap-2">
+                                                                    <Icon/>
+                                                                    {statusGroup.title}
+                                                                </div>
+                                                            </SelectItem>
+                                                        )
+                                                    })}
+                                                </SelectContent>
+
+                                            </Select>
+                                        </> : <Badge variant="outline" className={`flex items-center gap-2 ${STATUS_GROUPS[currentStatus as keyof typeof STATUS_GROUPS]?.countColor}`}>
+                                                {getStatusIcon(currentStatus)}{STATUS_GROUPS[currentStatus as keyof typeof STATUS_GROUPS]?.title}
+                                            </Badge>}
                                     </TableCell>
 
                                     <TableCell className="align-middle">

@@ -24,13 +24,14 @@ export async function PATCH(request:NextRequest, {params}:{params:Promise<{id:nu
 
         const {status} = await request.json()
         const {id:postId} = await params
+        const numericPostId = Number(postId)
 
         if(!STATUS_ORDER.includes(status)){
             return NextResponse.json({error:"Invalid status"},{status:400})
         }
 
         const updatedPost = await prisma.post.update({
-            where:{id:postId},
+            where:{id:numericPostId},
             data:{status},
             include:{
                 author:true,
